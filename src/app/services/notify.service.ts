@@ -30,7 +30,7 @@ export class NotifyService {
   async requestAndSendToken() {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
-      const localToken = localStorage.getItem('token');
+      const localToken = localStorage.getItem('tokenv2');
 
       // If 'localToken' is present, return from the function
       if (localToken) {
@@ -43,7 +43,7 @@ export class NotifyService {
         this.afMessaging.requestToken.subscribe({
           next: (token) => {
 
-            if(token!=null) localStorage.setItem("token", token);        
+            if(token!=null) localStorage.setItem("tokenv2", token);        
 
             alert(token);
 

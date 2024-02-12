@@ -17,8 +17,8 @@ showToken:any;
     this.notifyService.requestnotifyPermission()
     }
   ngOnInit(){
-    if(localStorage.getItem('token')){
-      this.showToken=localStorage['token']
+    if(localStorage.getItem('tokenv2')){
+      this.showToken=localStorage['tokenv2']
     }
   }
 }
