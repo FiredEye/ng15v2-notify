@@ -13,6 +13,14 @@ if (environment.production) {
 //   .catch(err => console.log(err));
 
 // Get the config file
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('firebase-messaging-sw.js')
+      .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+      }).catch(function(err) {
+          console.error('Service Worker registration failed:', err);
+      });
+}
 fetch(`config/config.json`)
   .then(response => response.json())
   .then((response: any) => {
