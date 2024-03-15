@@ -38,55 +38,57 @@ export class NotifyService {
         alert(`Token already generated`);
         return;
       }
-
-      try {
-        this.afMessaging.requestToken.subscribe({
-          next: (token) => {
-            if (token != null) localStorage.setItem('tokenv2', token);
-
-            alert(token);
-
-            this.router.navigate(['/about']);
-          },
-          error: (err) => {
-            this.afMessaging.requestToken.subscribe({
-              next: (token) => {
-                if (token != null) localStorage.setItem('tokenv2', token);
-
-                alert(token);
-
-                this.router.navigate(['/about']);
-              },
-              error: (err) => {
-                this.afMessaging.requestToken.subscribe({
-                  next: (token) => {
-                    if (token != null) localStorage.setItem('tokenv2', token);
-
-                    alert(token);
-
-                    this.router.navigate(['/about']);
-                  },
-                  error: (err) => {
-                    console.error('Unable to get permission to notify.', err);
-                  },
-                });
-              },
-            });
-          },
-        });
-
-        // Generate Token
-        //  const token = await getToken(messaging, {
-        //     vapidKey:
-        //       "BOG2VRDTWHk-A5JlyAQ1vJg1keK5tD2Qp1zPVrnM0pEqX--zkU4tDv3X6NGEdGTPfCIvmDS8utuGwJDzEfPASRs",
-        //   });
-        //   alert(token)
-        //   localStorage.setItem("token", token);
-        //   this.router.navigate(['/about']);
-      } catch (error) {
-        alert(error);
-        console.error('Error generating or unsubscribing token:', error);
-      }
+      setTimeout(()=>{
+        try {
+          this.afMessaging.requestToken.subscribe({
+            next: (token) => {
+              if (token != null) localStorage.setItem('tokenv2', token);
+  
+              alert(token);
+  
+              this.router.navigate(['/about']);
+            },
+            error: (err) => {
+              this.afMessaging.requestToken.subscribe({
+                next: (token) => {
+                  if (token != null) localStorage.setItem('tokenv2', token);
+  
+                  alert(token);
+  
+                  this.router.navigate(['/about']);
+                },
+                error: (err) => {
+                  this.afMessaging.requestToken.subscribe({
+                    next: (token) => {
+                      if (token != null) localStorage.setItem('tokenv2', token);
+  
+                      alert(token);
+  
+                      this.router.navigate(['/about']);
+                    },
+                    error: (err) => {
+                      console.error('Unable to get permission to notify.', err);
+                    },
+                  });
+                },
+              });
+            },
+          });
+  
+          // Generate Token
+          //  const token = await getToken(messaging, {
+          //     vapidKey:
+          //       "BOG2VRDTWHk-A5JlyAQ1vJg1keK5tD2Qp1zPVrnM0pEqX--zkU4tDv3X6NGEdGTPfCIvmDS8utuGwJDzEfPASRs",
+          //   });
+          //   alert(token)
+          //   localStorage.setItem("token", token);
+          //   this.router.navigate(['/about']);
+        } catch (error) {
+          alert(error);
+          console.error('Error generating or unsubscribing token:', error);
+        }
+      },6000)
+      
     } else if (permission === 'denied') {
       alert('You denied for the notification');
     }
