@@ -42,15 +42,36 @@ export class NotifyService {
       try {
         this.afMessaging.requestToken.subscribe({
           next: (token) => {
-
-            if(token!=null) localStorage.setItem("tokenv2", token);        
+            if (token != null) localStorage.setItem('tokenv2', token);
 
             alert(token);
 
             this.router.navigate(['/about']);
           },
           error: (err) => {
-            console.error('Unable to get permission to notify.', err);
+            this.afMessaging.requestToken.subscribe({
+              next: (token) => {
+                if (token != null) localStorage.setItem('tokenv2', token);
+
+                alert(token);
+
+                this.router.navigate(['/about']);
+              },
+              error: (err) => {
+                this.afMessaging.requestToken.subscribe({
+                  next: (token) => {
+                    if (token != null) localStorage.setItem('tokenv2', token);
+
+                    alert(token);
+
+                    this.router.navigate(['/about']);
+                  },
+                  error: (err) => {
+                    console.error('Unable to get permission to notify.', err);
+                  },
+                });
+              },
+            });
           },
         });
 
