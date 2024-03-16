@@ -28,12 +28,11 @@ export class NotifyService {
     }
   }
   async requestAndSendToken() {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
+    
       const localToken = localStorage.getItem('tokenv2');
 
       // If 'localToken' is present, return from the function
-      if (localToken) {
+      if (localToken && localToken !== 'null') {
         console.log('Token already generated');
         alert(`Token already generated`);
         return;
@@ -89,8 +88,6 @@ export class NotifyService {
         }
       },6000)
       
-    } else if (permission === 'denied') {
-      alert('You denied for the notification');
-    }
+   
   }
 }
