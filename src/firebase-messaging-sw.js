@@ -28,30 +28,18 @@ firebase.initializeApp({
   appId: "1:131374839398:web:3fa637d133a5407c65dfa7",
 });
 
-if (firebase.messaging.isSupported()) {
-  const messaging = firebase.messaging();
+  const messaging=firebase.messaging();
   messaging.setBackgroundMessageHandler((payload) => {
     console.log(
       "[firebase-messaging-sw.js] Received background message ",
       payload
     );
-    let notificationTitle = payload.data.title || "";
-    let notificationOptions = {
-      body: payload.data.body || "",
-      icon: "assets/icon.png",
-      data: payload.data,
-    };
-
-    // If notification object is present, update notification options
-    if (payload.notification) {
-      notificationTitle = payload.notification.title || "";
-      notificationOptions.body = payload.notification.body || "";
-      notificationOptions.icon = "assets/icon.png";
-    }
-
+      const notificationTitle = payload.notification.title || "";
+      const notificationOptions = {
+        body: payload.notification.body || "",
+        icon:"./assets/icon.png"
+      };
     self.registration.showNotification(notificationTitle, notificationOptions);
   });
-} else {
-  console.log("Browser not supported!");
-}
+
 // });

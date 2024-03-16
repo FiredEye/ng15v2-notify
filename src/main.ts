@@ -14,13 +14,19 @@ if (environment.production) {
 
 // Get the config file
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./firebase-messaging-sw.js')
-      .then(function(registration) {
-          console.log('Service Worker registered with scope:', registration);
-      }).catch(function(err) {
-          console.error('Service Worker registration failed:', err);
-      });
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+      console.log('Service Worker registered with scope:', registration.scope);
+
+      // Proceed with token generation after service worker registration
+      // requestAndSendToken();
+    } catch (error) {
+      console.error('Service Worker registration failed:', error);
+    }
+  });
 }
+
 fetch(`config/config.json`)
   .then(response => response.json())
   .then((response: any) => {

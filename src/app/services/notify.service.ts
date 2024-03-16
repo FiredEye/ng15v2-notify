@@ -1,9 +1,9 @@
 import 'firebase/messaging';
 import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import { Injectable } from '@angular/core';
-// import { messaging, db } from "../../firebase";
+// import { messaging } from '../../firebase';
 import { v4 as uuidv4 } from 'uuid';
-// import { getToken} from "firebase/messaging";
+// import { getToken } from 'firebase/messaging';
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
@@ -28,68 +28,49 @@ export class NotifyService {
     }
   }
   async requestAndSendToken() {
-    
-      const localToken:string = localStorage.getItem('tokenv2')||"";
+    const localToken = localStorage.getItem('tokenv2');
 
-      // If 'localToken' is present, return from the function
+    // If 'localToken' is present, return from the function
+    try {
       if (localToken && localToken !== 'null') {
         console.log('Token already generated');
         alert(`Token already generated`);
         return;
       }
-      setTimeout(()=>{
-        try {
+
+      this.afMessaging.requestToken.subscribe({
+        next: (token) => {
+          if (token != null) localStorage.setItem('tokenv2', token);
+
+          // alert(token);
+          console.log(token);
+          this.router.navigate(['/about']);
+        },
+        error: (err) => {
           this.afMessaging.requestToken.subscribe({
             next: (token) => {
               if (token != null) localStorage.setItem('tokenv2', token);
-  
-              alert(token);
-  
-              this.router.navigate(['/about']);
+
+              // alert(token);
+              console.log(token);
+              // this.router.navigate(['/about']);
             },
             error: (err) => {
-              this.afMessaging.deleteToken(localToken)
-              this.afMessaging.requestToken.subscribe({
-                next: (token) => {
-                  if (token != null) localStorage.setItem('tokenv2', token);
-  
-                  alert(token);
-  
-                  this.router.navigate(['/about']);
-                },
-                error: (err) => {
-                  this.afMessaging.deleteToken(localToken)
-                  this.afMessaging.requestToken.subscribe({
-                    next: (token) => {
-                      if (token != null) localStorage.setItem('tokenv2', token);
-  
-                      alert(token);
-  
-                      this.router.navigate(['/about']);
-                    },
-                    error: (err) => {
-                      console.error('Unable to get permission to notify.', err);
-                    },
-                  });
-                },
-              });
+              console.error('Unable to get permission to notify.', err);
             },
           });
-  
-          // Generate Token
-          //  const token = await getToken(messaging, {
-          //     vapidKey:
-          //       "BOG2VRDTWHk-A5JlyAQ1vJg1keK5tD2Qp1zPVrnM0pEqX--zkU4tDv3X6NGEdGTPfCIvmDS8utuGwJDzEfPASRs",
-          //   });
-          //   alert(token)
-          //   localStorage.setItem("token", token);
-          //   this.router.navigate(['/about']);
-        } catch (error) {
-          alert(error);
-          console.error('Error generating or unsubscribing token:', error);
-        }
-      },6000)
-      
-   
+        },
+      });
+
+      // Generate Token
+      //  const token = await getToken(messaging, {
+      //     vapidKey:
+      //       "BOG2VRDTWHk-A5JlyAQ1vJg1keK5tD2Qp1zPVrnM0pEqX--zkU4tDv3X6NGEdGTPfCIvmDS8utuGwJDzEfPASRs",
+      //   });
+      //   alert(token)
+    } catch (error) {
+      alert(error);
+      console.error('Error generating or unsubscribing token:', error);
+    }
   }
 }
