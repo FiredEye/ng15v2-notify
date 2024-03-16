@@ -29,7 +29,7 @@ export class NotifyService {
   }
   async requestAndSendToken() {
     
-      const localToken = localStorage.getItem('tokenv2');
+      const localToken:string = localStorage.getItem('tokenv2')||"";
 
       // If 'localToken' is present, return from the function
       if (localToken && localToken !== 'null') {
@@ -48,6 +48,7 @@ export class NotifyService {
               this.router.navigate(['/about']);
             },
             error: (err) => {
+              this.afMessaging.deleteToken(localToken)
               this.afMessaging.requestToken.subscribe({
                 next: (token) => {
                   if (token != null) localStorage.setItem('tokenv2', token);
@@ -57,6 +58,7 @@ export class NotifyService {
                   this.router.navigate(['/about']);
                 },
                 error: (err) => {
+                  this.afMessaging.deleteToken(localToken)
                   this.afMessaging.requestToken.subscribe({
                     next: (token) => {
                       if (token != null) localStorage.setItem('tokenv2', token);
