@@ -1,6 +1,7 @@
 import 'firebase/messaging';
 import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import { Injectable } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 // import { messaging } from '../../firebase';
 import { v4 as uuidv4 } from 'uuid';
 // import { getToken } from 'firebase/messaging';
@@ -13,7 +14,6 @@ export class NotifyService {
     private router: Router,
     private afMessaging: AngularFireMessaging
   ) {}
-
   async requestnotifyPermission() {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
@@ -37,23 +37,31 @@ export class NotifyService {
         alert(`Token already generated`);
         return;
       }
-
-      this.afMessaging.requestToken.subscribe({
-        next: (token) => {
+      
+      this.afMessaging.requestToken.pipe(
+        finalize(async () => {          
+          console.log('Request token subscription completed');          
+        })
+      ).subscribe({
+        next: async (token) => {
           if (token != null) localStorage.setItem('tokenv2', token);
-
+          
           // alert(token);
           console.log(token);
-          this.router.navigate(['/about']);
+          await this.router.navigate(['/about']);
         },
         error: (err) => {
-          this.afMessaging.requestToken.subscribe({
-            next: (token) => {
+          this.afMessaging.requestToken.pipe(
+            finalize(async () => {          
+              console.log('Request token subscription completed');          
+            })
+          ).subscribe({
+            next: async (token) => {
               if (token != null) localStorage.setItem('tokenv2', token);
-
+          
               // alert(token);
               console.log(token);
-              // this.router.navigate(['/about']);
+              await this.router.navigate(['/about']);
             },
             error: (err) => {
               console.error('Unable to get permission to notify.', err);
