@@ -35,6 +35,14 @@ export class AboutPage implements OnInit, OnDestroy {
                 // alert(`Token already generated`);
                 return;
               }
+              this.afMessaging.getToken.subscribe({
+                next: (toke) => {
+                  if (toke !== null) return;
+                },
+                error: (er) => {
+                  console.log(er);
+                },
+              });
 
               this.afMessaging.requestToken
                 .pipe(
@@ -52,31 +60,38 @@ export class AboutPage implements OnInit, OnDestroy {
                     await this.router.navigate(['/']);
                   },
                   error: (err) => {
-                    if (!localToken && localToken == null) {
-                      this.afMessaging.requestToken
-                        .pipe(
-                          finalize(async () => {
-                            console.log('Request token subscription completed');
-                          })
-                        )
-                        .subscribe({
-                          next: async (token) => {
-                            if (token != null)
-                              localStorage.setItem('tokenv2', token);
-                              alert(`from second request : ${token}`);
+                    this.afMessaging.getToken.subscribe({
+                      next: (toke) => {
+                        if (toke !== null) return;
+                      },
+                      error: (er) => {
+                        console.log(er);
+                      },
+                    });
 
-                            // alert(token);
-                            console.log(token);
-                            await this.router.navigate(['/']);
-                          },
-                          error: (err) => {
-                            console.error(
-                              'Unable to get permission to notify.',
-                              err
-                            );
-                          },
-                        });
-                    }
+                    this.afMessaging.requestToken
+                      .pipe(
+                        finalize(async () => {
+                          console.log('Request token subscription completed');
+                        })
+                      )
+                      .subscribe({
+                        next: async (token) => {
+                          if (token != null)
+                            localStorage.setItem('tokenv2', token);
+                          alert(`from second request : ${token}`);
+
+                          // alert(token);
+                          console.log(token);
+                          await this.router.navigate(['/']);
+                        },
+                        error: (err) => {
+                          console.error(
+                            'Unable to get permission to notify.',
+                            err
+                          );
+                        },
+                      });
                   },
                 });
             }
