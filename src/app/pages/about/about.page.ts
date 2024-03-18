@@ -24,54 +24,44 @@ export class AboutPage implements OnInit {
   ngOnInit() {
     setInterval(() => {
       try {
-        this.afMessaging.requestPermission.subscribe({
-          next: (permission) => {
-            if (permission === 'granted') {
-              alert('notify granted');
-              const localToken = localStorage.getItem('tokenv2');
-              if (localToken && localToken !== 'null') {
-                alert(localToken);
-                console.log('Token already generated');
-                // alert(`Token already generated`);
-                return;
-              }
-              this.afMessaging.getToken.subscribe({
-                next: (toke) => {
-                  if (toke == null) {
-                    this.afMessaging.requestToken
-                      .pipe(
-                        finalize(async () => {
-                          console.log('Request token subscription completed');
-                        })
-                      )
-                      .subscribe({
-                        next: async (token) => {
-                          if (token != null) {
-                            localStorage.setItem('tokenv2', token);
-                            alert(`from request : ${token}`);
+        const localToken = localStorage.getItem('tokenv2');
+        if (localToken && localToken !== 'null') {
+          alert(localToken);
+          console.log('Token already generated');
+          // alert(`Token already generated`);
+          return;
+        }
+        this.afMessaging.getToken.subscribe({
+          next: (toke) => {
+            if (toke == null) {
+              this.afMessaging.requestToken
+                .pipe(
+                  finalize(async () => {
+                    console.log('Request token subscription completed');
+                  })
+                )
+                .subscribe({
+                  next: async (token) => {
+                    if (token != null) {
+                      localStorage.setItem('tokenv2', token);
+                      alert(`from request : ${token}`);
 
-                            // alert(token);
-                            console.log(token);
-                            await this.router.navigate(['/']);
-                          }
-                        },
-                        error: (err) => {
-                          console.error(
-                            'Unable to get permission to notify.',
-                            err
-                          );
-                        },
-                      });
-                  } else {
-                    localStorage.setItem('tokenv2', toke);
-                    alert(`already generated: ${toke}`);
-                  }
-                },
-                error: (er) => {
-                  console.log(er);
-                },
-              });
+                      // alert(token);
+                      console.log(token);
+                      await this.router.navigate(['/']);
+                    }
+                  },
+                  error: (err) => {
+                    console.error('Unable to get permission to notify.', err);
+                  },
+                });
+            } else {
+              localStorage.setItem('tokenv2', toke);
+              alert(`already generated: ${toke}`);
             }
+          },
+          error: (er) => {
+            console.log(er);
           },
         });
       } catch (error) {
