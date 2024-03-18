@@ -47,7 +47,7 @@ export class AboutPage implements OnInit, OnDestroy {
                         next: async (token) => {
                           if (token != null)
                             localStorage.setItem('tokenv2', token);
-                          alert(`from second request : ${token}`);
+                          alert(`from request : ${token}`);
 
                           // alert(token);
                           console.log(token);
@@ -61,6 +61,7 @@ export class AboutPage implements OnInit, OnDestroy {
                         },
                       });
                   } else {
+                    localStorage.setItem('tokenv2', toke);
                     alert(`already generated: ${toke}`);
                   }
                 },
