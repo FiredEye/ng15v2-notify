@@ -56,7 +56,7 @@ export class AboutPage implements OnInit,OnDestroy {
       alert(error);
       console.error('Error generating or unsubscribing token:', error);
     }
-  }, 8000);;
+  }, 8000);
   constructor(
     public notifyService: NotifyService,
     private router: Router,
