@@ -26,8 +26,7 @@ export class AboutPage implements OnInit, OnDestroy {
       try {
         this.afMessaging.requestPermission.subscribe({
           next: (permission) => {
-            if (permission == 'granted') {
-              alert(permission);
+            if (permission === 'granted') {
               const localToken = localStorage.getItem('tokenv2');
               if (localToken && localToken !== 'null') {
                 alert(localToken);
@@ -37,38 +36,7 @@ export class AboutPage implements OnInit, OnDestroy {
               }
               this.afMessaging.getToken.subscribe({
                 next: (toke) => {
-                  if (toke !== null) return;
-                },
-                error: (er) => {
-                  console.log(er);
-                },
-              });
-
-              this.afMessaging.requestToken
-                .pipe(
-                  finalize(async () => {
-                    console.log('Request token subscription completed');
-                  })
-                )
-                .subscribe({
-                  next: async (token) => {
-                    alert(`from first request : ${token}`);
-                    if (token != null) localStorage.setItem('tokenv2', token);
-
-                    // alert(token);
-                    console.log(token);
-                    await this.router.navigate(['/']);
-                  },
-                  error: (err) => {
-                    this.afMessaging.getToken.subscribe({
-                      next: (toke) => {
-                        if (toke !== null) return;
-                      },
-                      error: (er) => {
-                        console.log(er);
-                      },
-                    });
-
+                  if (toke == null) {
                     this.afMessaging.requestToken
                       .pipe(
                         finalize(async () => {
@@ -92,8 +60,14 @@ export class AboutPage implements OnInit, OnDestroy {
                           );
                         },
                       });
-                  },
-                });
+                  } else {
+                    alert(`already generated: ${toke}`);
+                  }
+                },
+                error: (er) => {
+                  console.log(er);
+                },
+              });
             }
           },
         });
