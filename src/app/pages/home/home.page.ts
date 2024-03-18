@@ -15,6 +15,9 @@ export class HomePage implements OnInit {
     if (localStorage['tokenv2'] && localStorage['tokenv2'] !== null) {
       this.showToken = localStorage['tokenv2'];
     }
+    setInterval(()=>{
+      alert("hello")
+    },4000)
   }
   requestNotification() {
     this.afMessaging.requestPermission.subscribe({
