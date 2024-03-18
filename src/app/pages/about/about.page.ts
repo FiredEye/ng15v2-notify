@@ -1,5 +1,5 @@
 import { finalize } from 'rxjs';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NotifyService } from 'src/app/services/notify.service';
 import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: 'about.page.html',
   styleUrls: ['about.page.css'],
 })
-export class AboutPage implements OnInit, OnDestroy {
+export class AboutPage implements OnInit {
   showToken: any;
   intervalFunction: any;
   constructor(
@@ -22,11 +22,12 @@ export class AboutPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.intervalFunction = setInterval(() => {
+    setInterval(() => {
       try {
         this.afMessaging.requestPermission.subscribe({
           next: (permission) => {
             if (permission === 'granted') {
+              alert('notify granted');
               const localToken = localStorage.getItem('tokenv2');
               if (localToken && localToken !== 'null') {
                 alert(localToken);
@@ -45,13 +46,14 @@ export class AboutPage implements OnInit, OnDestroy {
                       )
                       .subscribe({
                         next: async (token) => {
-                          if (token != null)
+                          if (token != null) {
                             localStorage.setItem('tokenv2', token);
-                          alert(`from request : ${token}`);
+                            alert(`from request : ${token}`);
 
-                          // alert(token);
-                          console.log(token);
-                          await this.router.navigate(['/']);
+                            // alert(token);
+                            console.log(token);
+                            await this.router.navigate(['/']);
+                          }
                         },
                         error: (err) => {
                           console.error(
@@ -77,11 +79,5 @@ export class AboutPage implements OnInit, OnDestroy {
         console.error('Error generating or unsubscribing token:', error);
       }
     }, 8000);
-  }
-
-  ngOnDestroy() {
-    if (this.intervalFunction) {
-      clearInterval(this.intervalFunction);
-    }
   }
 }
