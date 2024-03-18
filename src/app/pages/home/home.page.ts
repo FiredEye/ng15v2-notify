@@ -10,10 +10,27 @@ import { Router } from '@angular/router';
 })
 export class HomePage implements OnInit {
   showToken: any;
-  constructor() {}
-  ngOnInit(){
-    if(localStorage['tokenv2']&&localStorage['tokenv2']!==null){
-      this.showToken=localStorage['tokenv2']
+  constructor(private afMessaging: AngularFireMessaging) {}
+  ngOnInit() {
+    if (localStorage['tokenv2'] && localStorage['tokenv2'] !== null) {
+      this.showToken = localStorage['tokenv2'];
     }
+  }
+  requestNotification() {
+    this.afMessaging.requestPermission.subscribe({
+      next: (permission) => {
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
+          alert('notification permission granted.');
+        } else {
+          // alert("permission denied from global service")
+          console.log('Notification permission denied.');
+          alert('notification permission denied.');
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 }
