@@ -14,7 +14,6 @@ if (environment.production) {
 
 // Get the config file
 if ('serviceWorker' in navigator) {
-  alert('has sw')
   window.addEventListener('load', async () => {
     try {
       const registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
