@@ -67,6 +67,16 @@ export class AboutPage implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        const notification = new Notification('Hi there!');
+        alert('allowed')
+        // …
+      } else if (permission === 'denied') {
+        alert('denied');
+      }
+    });
    this.intervalFunction
   }
   ngOnDestroy(): void {

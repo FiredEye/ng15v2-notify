@@ -12,16 +12,7 @@ export class HomePage implements OnInit {
   showToken: any;
   constructor(private afMessaging: AngularFireMessaging) {}
   ngOnInit() {
-    Notification.requestPermission().then((permission) => {
-      // If the user accepts, let's create a notification
-      if (permission === 'granted') {
-        const notification = new Notification('Hi there!');
-        alert('allowed')
-        // …
-      } else if (permission === 'denied') {
-        alert('denied');
-      }
-    });
+    
     if (localStorage['tokenv2'] && localStorage['tokenv2'] !== null) {
       this.showToken = localStorage['tokenv2'];
     }
