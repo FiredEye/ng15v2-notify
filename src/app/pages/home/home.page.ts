@@ -18,20 +18,15 @@ export class HomePage implements OnInit {
     }
   }
   requestNotification() {
-    this.afMessaging.requestPermission.subscribe({
-      next: (permission) => {
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-          alert('notification permission granted.');
-        } else {
-          // alert("permission denied from global service")
-          console.log('Notification permission denied.');
-          alert('notification permission denied.');
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
+    alert('hello')
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        alert('allowed');
+        // …
+      } else if (permission === 'denied') {
+        alert('denied');
+      }
     });
   }
 }

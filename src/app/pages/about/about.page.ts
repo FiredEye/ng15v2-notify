@@ -9,54 +9,59 @@ import { Router } from '@angular/router';
   templateUrl: 'about.page.html',
   styleUrls: ['about.page.css'],
 })
-export class AboutPage implements OnInit,OnDestroy {
+export class AboutPage implements OnInit, OnDestroy {
   showToken: any;
-  intervalFunction: any= setInterval(() => {
+  intervalFunction: any = setInterval(() => {
     try {
       const localToken = localStorage.getItem('tokenv2');
       if (localToken && localToken !== 'null') {
-      
         // alert(`Token already generated`);
         return;
       }
-      this.afMessaging.getToken.subscribe({
-        next: (toke) => {
-          if (toke == null) {
-            this.afMessaging.requestToken
-              .pipe(
-                finalize(async () => {
-                  console.log('Request token subscription completed');
-                })
-              )
-              .subscribe({
-                next: async (token) => {
-                  if (token != null) {
-                    localStorage.setItem('tokenv2', token);
-                    alert(`from request : ${token}`);
+      this.afMessaging.getToken
+        .pipe(
+          finalize(async () => {
+            console.log('Get token subscription completed');
+          })
+        )
+        .subscribe({
+          next: (toke) => {
+            if (toke == null) {
+              this.afMessaging.requestToken
+                .pipe(
+                  finalize(async () => {
+                    console.log('Request token subscription completed');
+                  })
+                )
+                .subscribe({
+                  next: async (token) => {
+                    if (token != null) {
+                      localStorage.setItem('tokenv2', token);
+                      alert(`from request : ${token}`);
 
-                    // alert(token);
-                    console.log(token);
-                    await this.router.navigate(['/']);
-                  }
-                },
-                error: (err) => {
-                  console.error('Unable to get permission to notify.', err);
-                },
-              });
-          } else {
-            localStorage.setItem('tokenv2', toke);
-            alert(`already generated: ${toke}`);
-          }
-        },
-        error: (er) => {
-          console.log(er);
-        },
-      });
+                      // alert(token);
+                      console.log(token);
+                      await this.router.navigate(['/']);
+                    }
+                  },
+                  error: (err) => {
+                    console.error('Unable to get permission to notify.', err);
+                  },
+                });
+            } else {
+              localStorage.setItem('tokenv2', toke);
+              alert(`already generated: ${toke}`);
+            }
+          },
+          error: (er) => {
+            console.log(er);
+          },
+        });
     } catch (error) {
       alert(error);
       console.error('Error generating or unsubscribing token:', error);
     }
-  }, 8000);
+  }, 3000);
   constructor(
     public notifyService: NotifyService,
     private router: Router,
@@ -67,19 +72,10 @@ export class AboutPage implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
-    Notification.requestPermission().then((permission) => {
-      // If the user accepts, let's create a notification
-      if (permission === 'granted') {
-        const notification = new Notification('Hi there!');
-        alert('allowed')
-        // …
-      } else if (permission === 'denied') {
-        alert('denied');
-      }
-    });
-   this.intervalFunction
+    
+    this.intervalFunction;
   }
   ngOnDestroy(): void {
-    clearInterval(this.intervalFunction)
+    clearInterval(this.intervalFunction);
   }
 }
