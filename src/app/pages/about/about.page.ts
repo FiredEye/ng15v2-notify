@@ -92,7 +92,9 @@ export class AboutPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    
+    if (localStorage['tokenv2'] && localStorage['tokenv2'] !== null) {
+      this.showToken = localStorage['tokenv2'];
+    }
     // this.intervalFunction;
     this.afMessaging.getToken
         .pipe(
