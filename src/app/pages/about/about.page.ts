@@ -96,71 +96,71 @@ export class AboutPage implements OnInit, OnDestroy {
       this.showToken = localStorage['tokenv2'];
     }
     // this.intervalFunction;
-    this.afMessaging.getToken
-        .pipe(
-          finalize(async () => {
-            alert('get token finalize')
-            console.log('Get token subscription completed');
-          })
-        )
-        .subscribe({
-          next: (toke) => {
-            if (toke == null) {
-              this.afMessaging.requestToken
-                .pipe(
-                  finalize(async () => {
-                    alert('request token finalize')
-                    console.log('Request token subscription completed');
-                  })
-                )
-                .subscribe({
-                  next: async (token) => {
-                    if (token != null) {
-                      localStorage.setItem('tokenv2', token);
-                      alert(`from request : ${token}`);
+    // this.afMessaging.getToken
+    //     .pipe(
+    //       finalize(async () => {
+    //         alert('get token finalize')
+    //         console.log('Get token subscription completed');
+    //       })
+    //     )
+    //     .subscribe({
+    //       next: (toke) => {
+    //         if (toke == null) {
+    //           this.afMessaging.requestToken
+    //             .pipe(
+    //               finalize(async () => {
+    //                 alert('request token finalize')
+    //                 console.log('Request token subscription completed');
+    //               })
+    //             )
+    //             .subscribe({
+    //               next: async (token) => {
+    //                 if (token != null) {
+    //                   localStorage.setItem('tokenv2', token);
+    //                   alert(`from request : ${token}`);
 
-                      // alert(token);
-                      console.log(token);
-                      await this.router.navigate(['/']);
-                    }
-                  },
-                  error: (err) => {
-                    alert("err req1"+err)
+    //                   // alert(token);
+    //                   console.log(token);
+    //                   await this.router.navigate(['/']);
+    //                 }
+    //               },
+    //               error: (err) => {
+    //                 alert("err req1"+err)
 
-                    console.error('Unable to get permission to notify.', err);
-                  },
-                });
-            } else {
-              localStorage.setItem('tokenv2', toke);
-              alert(`already generated: ${toke}`);
-            }
-          },
-          error: (er) => {
-            this.afMessaging.requestToken
-                .pipe(
-                  finalize(async () => {
-                    alert('err request token finalize')
-                    console.log('Request token subscription completed');
-                  })
-                )
-                .subscribe({
-                  next: async (token) => {
-                    if (token != null) {
-                      localStorage.setItem('tokenv2', token);
-                      alert(`from request : ${token}`);
+    //                 console.error('Unable to get permission to notify.', err);
+    //               },
+    //             });
+    //         } else {
+    //           localStorage.setItem('tokenv2', toke);
+    //           alert(`already generated: ${toke}`);
+    //         }
+    //       },
+    //       error: (er) => {
+    //         this.afMessaging.requestToken
+    //             .pipe(
+    //               finalize(async () => {
+    //                 alert('err request token finalize')
+    //                 console.log('Request token subscription completed');
+    //               })
+    //             )
+    //             .subscribe({
+    //               next: async (token) => {
+    //                 if (token != null) {
+    //                   localStorage.setItem('tokenv2', token);
+    //                   alert(`from request : ${token}`);
 
-                      // alert(token);
-                      console.log(token);
-                      await this.router.navigate(['/']);
-                    }
-                  },
-                  error: (err) => {
-                    alert("err req2"+err)
-                    console.error('Unable to get permission to notify.', err);
-                  },
-                });
-          },
-        });
+    //                   // alert(token);
+    //                   console.log(token);
+    //                   await this.router.navigate(['/']);
+    //                 }
+    //               },
+    //               error: (err) => {
+    //                 alert("err req2"+err)
+    //                 console.error('Unable to get permission to notify.', err);
+    //               },
+    //             });
+    //       },
+    //     });
   }
   ngOnDestroy(): void {
     // clearInterval(this.intervalFunction);

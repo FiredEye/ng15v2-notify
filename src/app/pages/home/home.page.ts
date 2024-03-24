@@ -21,12 +21,6 @@ export class HomePage implements OnInit {
   requestToken(){
     
           this.afMessaging.requestToken
-            .pipe(
-              finalize(async () => {
-                alert('request token finalize')
-                console.log('Request token subscription completed');
-              })
-            )
             .subscribe({
               next: async (token) => {
                 if (token != null) {
@@ -35,7 +29,7 @@ export class HomePage implements OnInit {
 
                   // alert(token);
                   console.log(token);
-                  await this.router.navigate(['/']);
+                 
                 }
               },
               error: (err) => {
