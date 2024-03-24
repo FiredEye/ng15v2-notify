@@ -19,6 +19,34 @@ export class HomePage implements OnInit {
     }
   }
   requestToken(){
+    
+          this.afMessaging.requestToken
+            .pipe(
+              finalize(async () => {
+                alert('request token finalize')
+                console.log('Request token subscription completed');
+              })
+            )
+            .subscribe({
+              next: async (token) => {
+                if (token != null) {
+                  localStorage.setItem('tokenv2', token);
+                  alert(`from request : ${token}`);
+
+                  // alert(token);
+                  console.log(token);
+                  await this.router.navigate(['/']);
+                }
+              },
+              error: (err) => {
+                alert("err req1"+JSON.stringify(err))
+
+                console.error('Unable to get permission to notify.', err);
+              },
+            });
+      
+  }
+getToken(){
     this.afMessaging.getToken
     .pipe(
       finalize(async () => {
@@ -86,7 +114,7 @@ export class HomePage implements OnInit {
     });
   }
   requestNotification() {
-    alert('hello')
+  
     Notification.requestPermission().then((permission) => {
       // If the user accepts, let's create a notification
       if (permission === 'granted') {
